@@ -1,0 +1,35 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Set base to your subfolder name
+RewriteBase /architecture-firm/
+
+# --------------------------------------------------------------------------
+# 1. Serve real files and directories as-is (css, js, images, etc.)
+# --------------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# --------------------------------------------------------------------------
+# 2. Hide index.php
+#    /admin/index.php or /admin/index → /admin/
+#    /index.php or /index            → /
+# --------------------------------------------------------------------------
+RewriteRule ^(.*/)index(\.php)?$ /architecture-firm/$1 [R=301,L]
+RewriteRule ^index(\.php)?$ /architecture-firm/ [R=301,L]
+
+# --------------------------------------------------------------------------
+# 3. Clean URLs — strip .php extension
+#    /admin/projects → serves admin/projects.php internally
+# --------------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]
+
+# --------------------------------------------------------------------------
+# 4. Remove trailing slash on non-directories
+# --------------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /architecture-firm/$1 [R=301,L]
